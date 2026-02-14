@@ -1,0 +1,211 @@
+/* --- Global Styles --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: radial-gradient(circle at top, #0f172a, #020617, #000);
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* --- Premium Navbar --- */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 105px;
+    padding: 0 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(2, 6, 27, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.logo { font-size: 35px; font-weight: 900; letter-spacing: -1px; }
+
+.nav-links { display: flex; gap: 40px; list-style: none; }
+.nav-links a { 
+    color: #94a3b8; 
+    text-decoration: none; 
+    font-size: 22px; 
+    font-weight: 600; 
+    transition: 0.3s;
+}
+.nav-links a:hover { color: #fff; }
+
+.nav-btn {
+    padding: 10px 24px;
+    border-radius: 50px;
+    background: #fff;
+    color: #000;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* --- Hero Section --- */
+.hero {
+    min-height: 100vh;
+    padding: 140px 10% 60px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    align-items: center;
+    gap: 40px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 14px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    border-radius: 20px;
+    background: rgba(168, 85, 247, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    color: #d8b4fe;
+    margin-bottom: 25px;
+}
+
+.hero-text h1 {
+    font-size: clamp(40px, 5vw, 70px);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 25px;
+}
+
+.accent {
+    background: linear-gradient(90deg, #a855f7, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.3));
+}
+
+.hero-text p {
+    font-size: 18px;
+    color: #94a3b8;
+    margin-bottom: 40px;
+    max-width: 500px;
+}
+
+.hero-buttons { display: flex; gap: 20px; }
+
+.primary-btn {
+    padding: 18px 36px;
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    border-radius: 12px;
+    border: none;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 15px 30px rgba(168, 85, 247, 0.3);
+    transition: 0.3s;
+}
+
+.primary-btn:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(168, 85, 247, 0.5); }
+
+.secondary-btn {
+    padding: 18px 36px;
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    border-radius: 12px;
+    border: none;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 15px 30px rgba(168, 85, 247, 0.3);
+    transition: 0.3s;
+}
+
+.secondary-btn:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(168, 85, 247, 0.5); }
+
+
+/* --- 3D INTERACTIVE BOOK --- */
+.hero-book {
+    perspective: 2000px;
+    display: flex;
+    justify-content: center;
+}
+
+.book-3d {
+    width: 300px;
+    height: 450px;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateY(-25deg);
+    transition: transform 0.1s ease-out; /* Smooth follow */
+}
+
+.book-spine {
+    position: absolute;
+    left: 0;
+    width: 45px;
+    height: 100%;
+    background: #581c87;
+    transform: translateX(-100%) rotateY(-90deg);
+    transform-origin: right;
+    border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.book-front {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, #0f172a, #020617);
+    border-left: 10px solid #a855f7;
+    border-radius: 0 15px 15px 0;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    box-shadow: 25px 25px 50px rgba(0,0,0,0.6);
+}
+
+.book-name { font-size: 36px; font-weight: 900; line-height: 1; margin: 15px 0; }
+.book-series { font-size: 10px; letter-spacing: 3px; color: #a855f7; font-weight: 800; }
+.book-tagline { font-size: 14px; color: #94a3b8; }
+
+/* --- Features Section --- */
+.features { padding: 100px 10%; text-align: center; }
+.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 50px; }
+.feature-card {
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    transition: 0.3s;
+}
+.feature-card:hover { border-color: #a855f7; background: rgba(168, 85, 247, 0.05); }
+/* --- Access / Pricing --- */
+.access { padding: 100px 10%; text-align: center; }
+.access-card {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 50px;
+    border-radius: 30px;
+    background: rgba(168, 85, 247, 0.03);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    backdrop-filter: blur(10px);
+}
+.access-price { font-size: 64px; font-weight: 900; margin-bottom: 20px; }
+.access-list { list-style: none; text-align: left; margin: 30px 0; }
+.access-list li { margin: 12px 0; color: #cbd5f5; }
+
+.access-btn {
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    border: none;
+    border-radius: 15px;
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.footer { padding: 40px; text-align: center; color: #64748b; font-size: 14px; border-top: 1px solid rgba(255,255,255,0.05); }
