@@ -1,126 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conquering Your Desires — Executive Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+import razorpay
+from flask import Flask, render_template, request, jsonify, send_from_directory
+import os
 
- <nav class="navbar">
-    <div class="nav-container">
-        <div class="logo">INZAMAM</div>
-        <ul class="nav-links">
-            <li><a href="#home">Overview</a></li>
-            <li><a href="#features">Chapters</a></li>
-            <li><a href="#pricing">Access</a></li>
-        </ul>
-        <button class="nav-btn pay-now-btn">Get Access</button>
-    </div>
-</nav>
+app = Flask(__name__)
 
-    <section class="hero" id="home">
-        <div class="hero-text">
-            <span class="badge">EXECUTIVE EDITION · 2026</span>
-            <h1>Master Your Mind.<br /><span class="accent">Conquer Your Desires.</span></h1>
-            <p>
-                A premium psychological & spiritual guide to self-discipline, emotional control, and inner dominance. 
-                Written for thinkers who want command over impulses.
-            </p>
-            <div class="hero-buttons">
-                <button class="primary-btn pay-now-btn">Buy Now</button>
-                <button class="secondary-btn">Preview Chapters</button>
-            </div>
-        </div>
+# --- CONFIGURATION ---
+# Apni Razorpay Keys jo aapne di thi
+RAZORPAY_KEY_ID = "rzp_test_S5gTqErA8nobIr"
+RAZORPAY_KEY_SECRET = "OJruhDoh1Fnmomw4NhAF1XwV"
 
-        <div class="hero-book">
-            <div class="book-3d">
-                <div class="book-spine"></div>
-                <div class="book-front">
-                    <p class="book-series">EXECUTIVE SERIES</p>
-                    <h2 class="book-name">Conquering<br>Your Desires</h2>
-                    <p class="book-tagline">Power · Control · Clarity</p>
-                    <p class="book-author">by DesireLab</p>
-                </div>
-            </div>
-        </div>
-    </section>
+# Razorpay Client initialize karna
+client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
 
-    <section class="features" id="features">
-        <h2 class="section-title">What You’ll Learn</h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="icon">🧠</div>
-                <h3>Understanding Desire</h3>
-                <p>The psychology & biology behind cravings and impulses.</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">⚖️</div>
-                <h3>Emotional Discipline</h3>
-                <p>How to remain stable under temptation and pressure.</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">👑</div>
-                <h3>Inner Authority</h3>
-                <p>Develop control without repression or guilt.</p>
-            </div>
-        </div>
-    </section>
+# Folder jahan aapki book.pdf rakhi hai (static folder)
+BOOK_FOLDER = os.path.join(app.root_path, 'static')
 
-    <section class="access" id="pricing">
-        <div class="access-card">
-            <p class="limit-badge">LIMITED ACCESS</p>
-            <h2 class="access-title">Begin Your Journey</h2>
-            <div class="access-price">₹999</div>
-            
-            <button class="primary-btn pay-now-btn" style="width: 100%;">Buy Now — ₹999</button>
+# --- ROUTES ---
 
-            <ul class="access-list">
-                <li><span>✔</span> Complete Executive Edition (PDF + EPUB)</li>
-                <li><span>✔</span> Lifetime Access & Updates</li>
-                <li><span>✔</span> Private Reading Vault</li>
-                <li><span>✔</span> Bonus: Mental Discipline Framework</li>
-            </ul>
-        </div>
-    </section>
+@app.route('/')
+def home():
+    # Home page render karte waqt Key ID bhej rahe hain frontend ko
+    return render_template('index.html', key_id=RAZORPAY_KEY_ID)
 
-    <footer class="footer">
-        <p>© 2026 DesireLab. Built for inner mastery.</p>
-    </footer>
+@app.route('/create-order', methods=['POST'])
+def create_order():
+    try:
+        # Step 1: Razorpay ke server par ek naya order banana
+        # Amount paise mein hota hai (999 * 100 = 99900)
+        data = {
+            "amount": 99900, 
+            "currency": "INR",
+            "receipt": "order_rcptid_11"
+        }
+        order = client.order.create(data=data)
+        
+        # Step 2: Order ID frontend ko wapas bhejna
+        return jsonify(order)
+    except Exception as e:
+        return jsonify(error=str(e)), 400
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
-        // Mouse follow effect for the book
-        const book = document.querySelector('.book-3d');
-        document.addEventListener('mousemove', (e) => {
-            let x = (window.innerWidth / 2 - e.pageX) / 30;
-            let y = (window.innerHeight / 2 - e.pageY) / 30;
-            book.style.transform = `rotateY(${-25 + x}deg) rotateX(${y}deg)`;
-        });
+@app.route('/success')
+def success():
+    # Payment ke baad user is page par aayega
+    return render_template('success.html')
 
-        // Razorpay Logic
-        const payBtns = document.querySelectorAll('.pay-now-btn');
-        payBtns.forEach(btn => {
-            btn.onclick = function(e){
-                e.preventDefault();
-                fetch('/create-order', { method: 'POST' })
-                .then(res => res.json())
-                .then(order => {
-                    var options = {
-                        "key": "YOUR_RZP_KEY", 
-                        "amount": order.amount,
-                        "currency": "INR",
-                        "name": "DesireLab",
-                        "order_id": order.id,
-                        "handler": (res) => window.location.href = "/success",
-                        "theme": { "color": "#a855f7" }
-                    };
-                    new Razorpay(options).open();
-                });
-            }
-        });
-    </script>
-</body>
-</html>
+@app.route('/download')
+def download_file():
+    # Yeh route asli PDF file download karwayega
+    try:
+        return send_from_directory(BOOK_FOLDER, 'book.pdf', as_attachment=True)
+    except FileNotFoundError:
+        return "Error: 'book.pdf' file static folder mein nahi mili!", 404
+
+if __name__ == '__main__':
+    # Server start karna
+    app.run(debug=True)
+
+
